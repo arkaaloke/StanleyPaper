@@ -1,0 +1,18 @@
+\section{Methodology}
+
+The concept underlying the proposed methodology is that by arbitrarily perturbing an AHU we can generate a distinguishable signal in the connected VAV boxes. In practice, by changing dramatically the supply air temperature in an AHU (input), the VAV box will respond by changing some controlled variables (reaheat and damper position) to maintain the temperature setpoint. However, if despite saturation of actuators (damper or reheat valve completely open or close) the system cannot keep up with zone cooling/heating load, the zone temperature ($T_{zone}$) will be affected and change. The AHU supply air temperature was chosen over the AHU flow rate as it is practically easier to tune. Also significantly perturbing flow rates might provide insufficient ventilation or damage the ducts due to high pressure. During the experiment, care was taken in ensuring that the perturbation had no impact on occupant comfort. To do so, while creating an overall large perturbation, the temperature setpoint for the supply air in the AHU was set one day to 52F (cold mode) and the following day to 60F (hot mode), whereby the normal setpoint for a week-day was 57F. Since thermal systems have a significant response lag, the perturbation was sustained for a full day in each mode. To reduce the noise in the data, knowing that VAV variables have little correlation with time of the day (result found while using the other methods), we resampled the data in daily intervals. Average daily values for RVP, DMP and $T_{zone}$ are still meaningful indicator of system behavior.
+The algorithm took the following steps:
+
+\begin{enumerate}
+\item Perturb one AHU at the time for two consecutive weekdays, one day in cold mode and one day in hot mode. 
+\item Collect data for each VAV for the following sensors: RVP, Tzone, DMP. 
+\item Re-sample data to obtain daily averages.
+\item For each daily average, label the data as belonging to a baseline weekday (WD), cold day, or hot day, for each perturbed AHU (ColdAHU2 would mean cold period for AHU 2). Each VAV data stream will have periods for all AHU perturbations.
+\item Standardize each stream of data to have mean =0 and standard deviation = 1.
+\item For each VAV and each period combine data into average daily vectors of the form [RVP, DMP, Tzone].
+\item Filter out vector elements that show a response value with opposite sign compared to physical intuition (e.g. a cold perturbation that reduced reheat)
+\item For each VAV and each couple of AHU perturbations, calculate the Euclidian distance between hot and cold vectors. At the end of this step each zone will have a metric for each AHU hot-cold perturbation.
+\item For each VAV take a vote to select the AHU whose perturbation has a highest metric (produced a larger difference in sensor vectors). The AHU selected with this method is expected to be associated with that VAV box.
+One important intuition here was that evaluating a metric for each VAV box across all the perturbation periods would provide better results than assigning the zone to an AHU for each perturbation. 
+\end{enumerate}
+

@@ -1,0 +1,90 @@
+% !TEX root =  main.tex
+
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[[#1]]}}}
+
+\newcommand{\eg}{\textit{e.g., }}
+\newcommand{\ie}{\textit{i.e., }}
+\newcommand{\etc}{\textit{etc.}}
+\newcommand{\etal}{\textit{et al.}}
+
+\newcommand{\lpd}{LPD}
+\newcommand{\lupd}{LUPD}
+\newcommand{\lap}{LAP}
+
+\newenvironment{relation}[2]
+{\scriptsize\begin{tabular}{@{}|@{\ }#1@{\ }|@{}}\hline#2\\\hline}
+{\hline \end{tabular}}
+
+\newcommand\hilight[1]{\adjustbox{bgcolor=lightgray,margin=0,padding=0}{#1}}
+
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+
+\newcommand\project[2]{\ensuremath{\Pi_{#1} #2}}
+\newcommand\tproject[2]{\ensuremath{\pi_{#1} #2}}
+\newcommand\cross{\ensuremath{\times}}
+\newcommand\attr[1]{\ensuremath{\mathit{attr}(#1)}}
+\newcommand\spec[1]{\ensuremath{\mathit{spec}(#1)}}
+\newcommand\pc[3]{\ensuremath{\mathit{PC}({#1},{#2},{#3})}}
+\newcommand\mpc[3]{\ensuremath{\mathit{MaxPC}({#1},{#2},{#3})}}
+
+
+
+\newlength{\tabsep}
+\setlength{\tabsep}{2pt}
+\newlength{\bkwidth}%
+
+\newenvironment{alg}%
+{\noindent\ignorespaces%
+\newcommand{\li}{\item\hspace*{\tabsep}}%
+\newcommand{\zi}{\item[]\hspace*{-4\tabsep}}%
+\setlength{\tabsep}{2pt}%
+\renewcommand{\labelenumi}{{\tiny \theenumi}}%
+\renewcommand{\labelenumii}{{\tiny \theenumii}}%
+\renewcommand{\theenumii}{\arabic{enumii}}%
+\newcommand{\ltab}{\addtolength{\tabsep}{6pt}}%
+\newcommand{\rtab}{\addtolength{\tabsep}{-6pt}}%
+\newcommand{\kw}[1]{{\bf ##1}}%
+\settowidth{\bkwidth}{\kw{then}}%
+\newcommand{\bkw}[2][\bkwidth]{\parbox{##1}{\kw{##2}}}%
+}%
+{\par\noindent%
+\ignorespacesafterend}
+
+\newcommand{\proc}[1]{\textnormal{\scshape#1}}
+
+\definecolor{alert}{rgb}{0.76,0.1,0.1}
+\definecolor{desaturated_blue}{rgb}{0.24,0.36,0.71}
+\definecolor{desaturated_green}{rgb}{0.2,0.6,0.1}
+\definecolor{grey}{rgb}{0.4,0.4,0.4}
+\definecolor{lightgrey}{rgb}{0.6,0.6,0.6}
+\newcommand{\listinghdr}[1]{\multicolumn{2}{l}{\hspace{-0.8em} \textbf{#1}}}
+\lstdefinelanguage{choicelang}[]{Java}{%
+    morekeywords={grammar, choose, assert, assign, od, fi, begin, end, boundedwhile, angelicprint, def, return, val, var, snd, rcvandassert},
+    deletekeywords={int}
+}
+\lstset{basicstyle=\scriptsize\sffamily,
+keywordstyle=\bfseries,
+commentstyle=\color{grey},
+% stringstyle=\color{strings},
+identifierstyle=\color{black},
+% numbers=left, 
+numberstyle=\tiny,
+numbersep=5pt,
+stepnumber=1,
+columns=fullflexible,
+language={choicelang},
+mathescape=true,
+escapeinside={@}{@},
+mathescape=false
+}
+
+\newcommand{\id}[1]{\ensuremath{\mathop{\mathit{\hyphens#1}}\nolimits}}
+\newcommand{\hyphens}{\mathcode`\-=`\-\relax}
+ \newcommand{\refines}{\ensuremath{\sqsubseteq}}
+ \newcommand{\tuple}[1]{\ensuremath{\langle#1\rangle}}
+ 
+ \newcommand{\codetf}[1]{{\small \textsf{#1}}}
+
+ \newcommand{\TODO}[1]{{\color{red}#1}}

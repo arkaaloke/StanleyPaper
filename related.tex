@@ -1,0 +1,46 @@
+\section{Results With Existing Methods}
+
+Techniques commonly employed to detect relationships in data streams include: correlation of raw data ~\cite{koc2014comparison}, correlation of transformed data ~\cite{EMD}, principal component analysis (PCA) and clustering ~\cite{narayanaswamy2014data,hong2013towards}, statistical process control ~\cite{wheeler1992understanding}, and model-based system identification (i.e., building a model by looking for the best fit from a single VAV and alternative AHU data). Preliminary analysis of the building dataset tested conventional correlation methods to find relationships between AHU and the corresponding VAV boxes. Table 1 shows an example of these coefficients. Results show very poor correlation. Desired values inside the bold boxes should be higher, in absolute value, than the corresponding values in the other rows. The same test was repeated with data resampled at 5 min, 15 min and daily, yielding similar results. Thus, this method does not allow identifying which VAV boxes are connected to which AHU.
+
+\begin{table}[ht]\scriptsize
+ \caption{Correlation matrix (showing raw data from two AHU and two VAV boxes). Data from May 28 to July 14 2015, resampled at daily rate. }
+ \label{tab:corr}
+%\centering
+%\begin{tabular}{|c{0.5cm}|c{0.5cm}|c{0.5cm}|c{0.5cm}|c{0.5cm}|c{0.5cm}|c{0.5cm}|c{0.5cm}|}
+\begin{tabular*}{0.40\textwidth}{|c|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{2}{|c|}{} & 
+  \multicolumn{3}{|c|}{Example $VAV_{AHU3}$} & \multicolumn{3}{|c|}{Example $VAV_{AHU5}$} \\ \hline
+\multicolumn{2}{|c|}{} & $T_{zone}$ & DMP & RVP &  $T_{zone}$ & DMP & RVP \\ \hline
+AHU 3 & $T_{sa}$ & -0.06 & 0.06 & 0.11 & -0.11 & 0.24 & 0.29 \\ \hline
+AHU 5  & $T_{sa}$ & -0.20 & -0.19 & -0.06 & -0.04 & -0.01 & 0.02 \\ \hline
+\end{tabular*}
+\end{table}
+
+
+
+In contrast to prior research monitoring energy consumption ~\cite{EMD}, the variable measured in this test are pressures, temperatures, flows and actuator positions, which show delayed and attenuated responses to changes in input variables, thus reducing correlation. Further, AHU and VAV boxes/zones are physically distant (differently from ~\cite{koc2014comparison}), and variables in the latter are significantly influenced by additional measured and non-measured disturbances (Figure~\ref{fig:ahudiagram}). For this reason, sensor values show a small signal to noise ratio. In addition, sensor readings are frequently constrained between physical limits (e.g. max damper position) and kept around setpoints by nested control loops. Also, cross-talk between systems (i.e., zones might influence each other) and similarity in the way different AHU are controlled (setpoints and daily behavior are similar) make correlation of raw data ineffective.
+Next, we constructed feature vectors for the data of each VAV. Features included were: Tzone, DMP, RVP, Tsetpoint, measured flow (FLW), flow setpoint (FWS), day of the week, time of the day. PCA was applied to these feature vectors to identify the two principal components and correlate them to the Tsa. Unfortunately, results of this analysis are not very different from what obtained with raw data (Table 2). Again, this method was ineffective in inferring the relationship investigated.
+
+
+\begin{table}[ht]\scriptsize
+ \caption{ Correlation matrix (showing 2 principal components of VAV data and two AHU). Data from May 28 to July 14 2015}
+ \label{tab:pca}
+%\centering
+%\begin{tabular}{|c{0.5cm}|c{0.5cm}|c{0.5cm}|c{0.5cm}|c{0.5cm}|c{0.5cm}|c{0.5cm}|c{0.5cm}|}
+\begin{tabular*}{0.40\textwidth}{|c|c|c|c|c|c|}
+\hline
+\multicolumn{2}{|c|}{} & 
+  \multicolumn{2}{|c|}{Example $VAV_{AHU3}$} & \multicolumn{2}{|c|}{Example $VAV_{AHU5}$} \\ \hline
+\multicolumn{2}{|c|}{} & $\lambda_1$ & $\lambda_2$ & $\lambda_1$ &  $\lambda_2$ \\ \hline
+AHU 3 & $T_{sa}$ & 0.12 & 0.12 & 0.20 & 0.09  \\ \hline
+AHU 5  & $T_{sa}$ & -0.12 & -0.15 & -0.04 & -0.05  \\ \hline
+\end{tabular*}
+\end{table}
+
+
+Finally, we tested a completely different and novel approach involving system identification (SID) techniques, which are used in control engineering to find a mathematical relationship (model) between inputs and outputs variables in an observed system [5]. A physics-inspired black-box dynamical model was constructed to predict Tzone, based on the available sensor data: \\
+
+$T_{zone,t} = \beta_1 T_{zone,t-1} + {FLW}_t * \sum\limits_{t}^{t-k} \beta_{2i}{RVP}_i + \beta_3 {FLW}_t * T_{sa,t}^{AHU} + \beta_4 * T_{oat,t}$
+
+where variable names are defined above, $\beta_i$ are the statistical coefficients, and t stands for time. The equation is in the form of an autoregressive (AR) time series model with exogenous inputs and interactive effects (some variables are multiplied). The term with the sum represents the lag in the effect of the reheat valve. The model is based detailed physical knowledge of the heat transfer processes in VAV boxes. Note that all the variables in this equation belong to the VAV with the exception of ($T_{sa,t}^{AHU}$), that represents the supply air temperature controlled by the AHU at time t. The idea is that using the $T_{sa,t}^{AHU}$ from the AHU actually connected to each VAV would improve the model fit. Both linear regression and lasso ~\cite{tibshirani1996regression} were used to fit the model over 15-min resampled data. While the model fit the data very well (R2=76-95\% depending on the zone), it failed to capture the difference in AHU. Plugging in different $T_{sa,t}^{AHU}$ did not change the fit of the model as we had expected. We reasoned that the main cause of this is that the majority of the variation in the output variable $T_{zone,t}$ is captured by the first term of the model (zone temperature at the previous time step) and the remaining $\beta_i$  coefficients are relatively small. With the calculated coefficients, the input variable $T_{sa,t}^{AHU}$ would have to change by more than 20 °F to produce measurable effects in the output variable. Such large temperature differential never occurs spontaneously in our recorded data, and if artificially produced would seriously compromise occupants’ comfort. Nevertheless, this prompted us to explore the idea of actively perturbing the building to measure system response.

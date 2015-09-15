@@ -1,0 +1,141 @@
+%
+% sample.tex
+% $Id: sample.tex,v 1.1 2006/03/18 00:21:36 johnh Exp johnh $
+%
+% File is renamed to sensys-full.tex to reflect the twists made to use sensys-proc.cls.
+% 
+
+% The default of sigplan-proc-varsize is 9pt, indented paragraphs (acm style)
+% For Sensys or other 10pt conference, use the 10pt option
+%\documentclass{sigplan-proc-varsize}
+% options:
+%\documentclass[9pt]{sigplan-proc-varsize}
+%\documentclass[nocopyrightspace,10pt]{sigplan-proc-varsize-sensys-abstract}
+
+\documentclass{sig-alternate-2013}
+
+% % hack to avoid the ugly ACM paragraph definition
+% % => can't leave blank line after this
+% (remove comment for this hack)
+% \renewcommand{\paragraph}[1]{\vskip 6pt\noindent\textbf{#1 }}
+
+%\usepackage[boxed]{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{placeins}
+\usepackage{graphicx}
+\usepackage{balance}
+\usepackage{color}
+%\usepackage{comment}
+\usepackage{subcaption}
+\usepackage{epsfig}
+\usepackage{hyperref}
+\usepackage[ruled]{algorithm2e}
+\usepackage{epstopdf}
+
+\usepackage{amsmath}
+%\usepackage{amsthm}
+\usepackage{listings}
+\usepackage{multirow}
+%\usepackage{subfig}
+\usepackage{adjustbox}
+\usepackage[table]{xcolor}
+\usepackage{booktabs,siunitx}
+\usepackage{comment}
+\usepackage{fixltx2e}
+\usepackage{enumitem}
+\definecolor{lightgray}{gray}{0.8}
+
+\newcounter{example}[section]
+\newenvironment{example}[1][]{ \setlength{\topsep}{0pt} \refstepcounter{example}
+   \noindent \textbf{Example~\theexample. #1} \rmfamily \setlength{\partopsep}{0pt}}
+
+\newfont{\mycrnotice}{ptmr8t at 7pt}
+\newfont{\myconfname}{ptmri8t at 7pt}
+\let\crnotice\mycrnotice%
+\let\confname\myconfname%
+
+\permission{Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for components of this work owned by others than ACM must be honored. Abstracting with credit is permitted. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee. Request permissions from Permissions@acm.org.}
+\conferenceinfo{BuildSys'15,}{November 4--5, 2015, Seoul, South Korea..} 
+\copyrightetc{\copyright~2015 ACM. ISBN \the\acmcopyr}
+\crdata{978-1-4503-3981-0/15/11\ ...\$15.00.\\
+DOI: http://dx.doi.org/10.1145/XXX.XXXXXXX}
+% Update the XXX's to the DOI assigned by ACM rightsreview forms
+
+\clubpenalty=10000 
+\widowpenalty = 10000
+
+ 
+
+% (1) choose a font that is available as T1
+% for example:
+\usepackage{lmodern}
+
+% (2) specify encoding
+\usepackage[T1]{fontenc}
+
+% (3) load symbol definitions
+\usepackage{textcomp}
+
+\numberofauthors{4}
+
+\author{
+	Marco Pritoni\\
+      \affaddr{UC Davis}
+ \alignauthor
+ Arka A. Bhattacharya, David Culler \\
+ \affaddr{UC Berkeley} 
+\alignauthor
+  Mark Modera\\
+ \affaddr{UC Davis}
+}
+
+
+\title{Short Paper: A Study for Discovering Functional Relationships Between Building HVAC Subsystems using Sensor Data}
+
+%\crdata{978-1-4503-1169-4}
+%\conferenceinfo{SenSys'13,} {November 11--15, 2013, Rome, Italy.}
+%\CopyrightYear{2013}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+In Building Automation Systems contextual information about sensors is frequently missing or hard-coded in the control code. Retrieving this data is time consuming and error-prone, but necessary to write any type of control application. Automating metadata acquisition is a new and active area of research. Methods to infer metadata from sensor labels or from recorded data have been previously proposed. However, these methods are ineffective in uncovering the association between HVAC components. In fact, measured variables (pressures, temperatures, flows, valve positions) have slow and attenuated responses to changes in input variables, thus impairing the efficacy of correlation methods. In addition, sensor readings are frequently constrained between physical limits and kept around setpoints by nested control loops. For this reason, pure statistical methods fail to capture the differences between sensor streams and are unable to classify them. In this article, we propose a new method for discovering functional relationships between Air-Handling Units and Variable-Air-Volume Boxes from sensor data. The method utilizes perturbations of subsystem variables, while guaranteeing that the building zones remain within comfort boundaries. The method is applied to an existing building and its results are compared with those obtained by other pre-existing methods. Results of this study show a recall rate close to 80\%.
+
+\end{abstract}
+
+% A category with the (minimum) three required fields
+% \category{H.4}{Information Systems Applications}{Miscellaneous}
+% %A category including the fourth, optional field follows...
+% \category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
+
+% \terms{Delphi theory}
+
+% \keywords{ACM proceedings, \LaTeX, text tagging}
+\input{macros}
+\input{intro}
+\input{setup}
+%\input{outline}
+\input{related}
+\input{method}
+\input{results}
+\input{conclusion}
+%\input{outline2}
+%\input{eval}
+%\input{type}
+%\input{casestudy}
+%\input{apps}
+%\input{evaluation}
+%\input{application}
+%\input{related}
+%\input{discussion}
+%\input{conclusion}
+
+% \balance
+\bibliographystyle{abbrv}
+\footnotesize
+\bibliography{sigproc}  % sigproc.bib is the name of the Bibliography in this case
+\end{document}
